@@ -1,5 +1,4 @@
 # == Class: sssd::params
-# 
 # Set up parameters that vary based on platform or distribution.
 # 
 # UID_MIN is the lowest uid allowed for use by non-system accounts.
@@ -11,15 +10,12 @@
 # forward-compatible.
 #
 # === Examples
-#
 # class { 'sssd::params': }
 #
 # === Authors
-#
 # Nicholas Waller <code@nicwaller.com>
 #
 # === Copyright
-#
 # Copyright 2013 Nicholas Waller, unless otherwise noted.
 #
 class sssd::params {

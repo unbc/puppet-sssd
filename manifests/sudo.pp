@@ -1,5 +1,4 @@
 # == Class: sssd::sudo
-#
 # This is an optional helper class for defining system groups that
 # are allowed to use sudo.
 #
@@ -7,17 +6,15 @@
 # module instead.
 #
 # === Parameters
-# 
 # [*sudo_groups*]
-#   An array of LDAP groups that contain users who are permitted
-#   unlimited use of the sudo command. The LDAP groups MUST have
-#   a numeric group ID (eg. gidNumber) defined to be usable.
+# An array of LDAP groups that contain users who are permitted
+# unlimited use of the sudo command. The LDAP groups MUST have
+# a numeric group ID (eg. gidNumber) defined to be usable.
 #
 # === Requires
 # - [puppetlab/stdlib]
 #
 # === Example
-# 
 # class { 'sssd::sudo':
 #   sudo_groups => 'Administrators',
 # }

@@ -1,5 +1,4 @@
 # == Class: sssd::homedir
-#
 # Allow home directories to be created automatically on first logon.
 # This is very useful when authenticating against a directory!
 # 
@@ -8,7 +7,6 @@
 # the manifest in this module.
 #
 # === Example
-#
 # include sssd::homedir
 #
 class sssd::homedir {

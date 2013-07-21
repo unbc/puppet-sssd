@@ -1,5 +1,4 @@
 # == Define: sssd::domain
-#
 # This type is used to define one or more domains which SSSD
 # will authenticate against.
 #
@@ -16,18 +15,11 @@
 # === Parameters
 # TODO: copy notes from my original sssd.conf file
 #
-# [*param*]
-#  (opt1|opt2) - what it does
-#
-# [*param2*]
-#  what it does
-#
 # === Requires
 # - [ripienaar/concat]
 # - [puppetlab/stdlib]
 #
 # === Example
-#
 # sssd::domain { 'contoso.com':
 #   fqdn => 'uni.adr.unbc.ca',
 # }
