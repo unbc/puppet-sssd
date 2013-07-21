@@ -26,7 +26,7 @@ class sssd::sudo (
 
   file { '/etc/sudoers.d/sssd':
     ensure  => file,
-    mode  => 440,
-    content  => template('sssd/sudoers.erb'),
+    mode    => '0440',
+    content => template('sssd/sudoers.erb'),
   }
 }

@@ -42,7 +42,7 @@ class sssd (
     ensure      => installed,
   } -> concat { 'sssd_conf':
     path        => '/etc/sssd/sssd.conf',
-    mode        => 400,
+    mode        => '0400',
   } ~> exec { 'authconfig-sssd':
     command     => '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablelocauthorize --update',
     refreshonly => true,
