@@ -12,29 +12,31 @@
 # include sssd::homedir
 #
 class sssd::homedir {
-  # messagebus required for centos6 that appears to not start it by default
-  package { 'oddjob-mkhomedir':
-    ensure  => installed,
-    notify  => Exec['authconfig-mkhomedir'],
-  } -> service { 'messagebus':
-    ensure  => running,
-    # I don't normally use hasstatus, but messagebus will restart on EVERY run
-    # if it isn't included here. (Anybody know why? Add a comment!)
+  # In RHEL6, messagebus is not started by default.  
+  service { 'messagebus':
+    ensure    => running,
+    enable    => true,
+    # If hasstatus is not set to true, messagebus will restart EVERY time.
+    # Does anyone know why?
     hasstatus => true,
-    enable  => true,
-  } -> service { 'oddjobd':
-    ensure  => running,
-    enable  => true,
   }
 
+  package { 'oddjob-mkhomedir':
+    ensure => installed,
+    notify => Exec['authconfig-mkhomedir'],
+  }
+
+  service { 'oddjobd':
+    ensure  => running,
+    enable  => true,
+    require => [ Package['oddjob-mkhomedir'], Service['messagebus'] ],
+  }
+
+  # We always need to start the sssd service after calling --mkhomedir.
   exec { 'authconfig-mkhomedir':
     command     => '/usr/sbin/authconfig --enablemkhomedir --update',
     refreshonly => true,
     require     => [ Service['messagebus'], Service['oddjobd'] ],
-    notify      => Exec[ 'authconfig-sssd' ],
+    notify      => Exec[ 'authconfig-sssd' ], 
   }
-
-  # According to research by pohl/nwaller, if you run --enablemkhomedir BEFORE turning on
-  # SSSD, the setting will stick wtihout breaking anything. If you run it afterwards or
-  # simultaneously then it disables SSSD.
 }
