@@ -22,11 +22,11 @@
 class sssd::sudo (
   $sudo_groups
 ) {
-	validate_array($sudo_groups)
+  validate_array($sudo_groups)
 
-	file { '/etc/sudoers.d/sssd':
-		ensure	=> file,
-		mode	=> 440,
-		content	=> template('sssd/sudoers.erb'),
-	}
+  file { '/etc/sudoers.d/sssd':
+    ensure  => file,
+    mode  => 440,
+    content  => template('sssd/sudoers.erb'),
+  }
 }
