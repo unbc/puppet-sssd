@@ -1,0 +1,37 @@
+[domain/<%= @ldap_domain %>]
+id_provider = ldap
+auth_provider = krb5
+chpass_provider = krb5
+access_provider = simple
+simple_allow_groups = <%= @simple_allow_groups.flatten.join(',') %>
+cache_credentials = <%= @cache_credentials %>
+min_id = <%= @real_min_id %>
+entry_cache_timeout = <%= @entry_cache_timeout %>
+krb5_realm = <%= @krb5_realm %>
+krb5_canonicalize = <%= @krb5_canonicalize %>
+ldap_uri = <%= @ldap_uri %>
+ldap_search_base = <%= @ldap_search_base %>
+ldap_referrals = <%= @ldap_referrals %>
+enumerate = <%= @enumerate %>
+ldap_force_upper_case_realm = <%= @ldap_force_upper_case_realm %>
+ldap_schema = <%= @ldap_schema %>
+ldap_default_bind_dn = <%= @ldap_default_bind_dn %>
+ldap_default_authtok_type = <%= @ldap_default_authtok_type %>
+ldap_default_authtok = <%= @ldap_default_authtok %>
+ldap_id_use_start_tls = <%= @ldap_id_use_start_tls %>
+ldap_tls_reqcert = <%= @ldap_tls_reqcert %>
+<% if @ldap_tls_cacert %>
+ldap_tls_cacert = <%= @ldap_tls_cacert %>
+<% end %>
+ldap_user_object_class = <%= @ldap_user_object_class %>
+ldap_user_name = <%= @ldap_user_name %>
+ldap_user_uid_number = <%= @ldap_user_uid_number %>
+ldap_user_gid_number = <%= @ldap_user_gid_number %>
+ldap_user_gecos = <%= @ldap_user_gecos %>
+ldap_user_shell = <%= @ldap_user_shell %>
+ldap_user_home_directory = <%= @ldap_user_home_directory %>
+ldap_user_principal = <%= @ldap_user_principal %>
+ldap_group_object_class = <%= @ldap_group_object_class %>
+ldap_group_name = <%= @ldap_group_name %>
+ldap_group_gid_number = <%= @ldap_group_gid_number %>
+ldap_group_member = <%= @ldap_group_member %>
