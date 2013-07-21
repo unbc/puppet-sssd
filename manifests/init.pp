@@ -32,22 +32,31 @@ class sssd (
   validate_array($filter_users)
   validate_array($filter_groups)
 
+  package { 'sssd':
+    ensure      => installed,
+  }
+  
+  concat { 'sssd_conf':
+    path        => '/etc/sssd/sssd.conf',
+    mode        => '0400',
+    require     => Package['sssd'],
+  }
+  
   concat::fragment{ 'sssd_conf_header':
     target  => 'sssd_conf',
     content => template('sssd/header_sssd.conf.erb'),
     order   => 10,
   }
 
-  package { 'sssd':
-    ensure      => installed,
-  } -> concat { 'sssd_conf':
-    path        => '/etc/sssd/sssd.conf',
-    mode        => '0400',
-  } ~> exec { 'authconfig-sssd':
+  exec { 'authconfig-sssd':
     command     => '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablelocauthorize --update',
     refreshonly => true,
-  } ~> service { 'sssd':
+    subscribe   => Concat['sssd_conf'],
+  }
+  
+  service { 'sssd':
     ensure      => running,
     enable      => true,
+    subscribe   => Exec['authconfig-sssd'],
   }
 }
