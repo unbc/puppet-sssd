@@ -66,14 +66,14 @@ define sssd::domain (
   $entry_cache_timeout = 60,
   $krb5_canonicalize = false,
 ) {
+  validate_array($simple_allow_groups)
+
   include sssd::params
   if $min_id == undef {
     $real_min_id = $sssd::params::dist_uid_min
   } else {
     $real_min_id = $min_id
   }
-
-  validate_array($simple_allow_groups)
 
   concat::fragment { "sssd_domain_${ldap_domain}":
     target  => 'sssd_conf',
