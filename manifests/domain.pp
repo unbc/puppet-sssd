@@ -24,6 +24,12 @@
 #   fqdn => 'uni.adr.unbc.ca',
 # }
 #
+# === Authors
+# Nicholas Waller <code@nicwaller.com>
+#
+# === Copyright
+# Copyright 2013 Nicholas Waller, unless otherwise noted.
+#
 define sssd::domain (
   $ldap_domain,
   $ldap_uri,

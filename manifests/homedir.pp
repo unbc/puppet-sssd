@@ -9,6 +9,12 @@
 # === Example
 # include sssd::homedir
 #
+# === Authors
+# Nicholas Waller <code@nicwaller.com>
+#
+# === Copyright
+# Copyright 2013 Nicholas Waller, unless otherwise noted.
+#
 class sssd::homedir {
   # In RHEL6, messagebus is not started by default.  
   service { 'messagebus':

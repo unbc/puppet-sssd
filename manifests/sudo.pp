@@ -18,6 +18,12 @@
 # class { 'sssd::sudo':
 #   sudo_groups => 'Administrators',
 # }
+#
+# === Authors
+# Nicholas Waller <code@nicwaller.com>
+#
+# === Copyright
+# Copyright 2013 Nicholas Waller, unless otherwise noted.
 # 
 class sssd::sudo (
   $sudo_groups
