@@ -1,32 +1,36 @@
 # == Class: sssd
-#
 # Manage SSSD authentication on RHEL-based systems.
 #
 # === Parameters
-# 
 # [*domains*]
-#   For each sssd::domain type you use, you ALSO need to specify it here.
-#   This determines the order in which domains are used for lookups.
+# Required. Array. For each sssd::domain type you declare, you SHOULD also
+# include the domain name here. This defines the domain lookup order.
+#
+# [*filter_users*]
+# Optional. Array. Default is 'root'. Exclude specific users from being
+# fetched using sssd. This is particularly useful for system accounts.
+#
+# [*filter_groups*]
+# Optional. Array. Default is 'root'. Exclude specific groups from being
+# fetched using sssd. This is particularly useful for system accounts.
 # 
+# === Requires
+# - [ripienaar/concat]
+# - [puppetlab/stdlib]
+#
 # === Example
-# 
 # class { 'sssd':
 #   domains => [ 'uni.adr.unbc.ca' ],
 # }
 #
 class sssd (
   $domains,
-  $filter_groups   = 'root',
-  $filter_users    = 'root'
+  $filter_users    = [ 'root' ],
+  $filter_groups   = [ 'root' ]
 ) {
-	# FIXME: there's a bug in this manifest right now. On the first run, sssd.conf
-	# is APPENDED instead of being REPLACED. This causes problems! - nwaller
-	# Subsequent runs appear to fix the issue, but why doesn't it work right away?
-
-	# It might be necessary to introduce the anchor pattern here... ?
-	# https://github.com/puppetlabs/puppetlabs-stdlib/blob/master/lib/puppet/type/anchor.rb
-
 	validate_array($domains)
+	validate_array($filter_users)
+	validate_array($filter_groups)
 
 	concat::fragment{ 'sssd_conf_header':
 		target  => 'sssd_conf',
@@ -46,8 +50,4 @@ class sssd (
 		ensure	=> running,
 		enable	=> true,
 	}
-	# Originally there was a notify => Exec[] directive here, but I
-	# had a weird problem with pg-uni-cups-01 where if SSSD was stopped,
-	# puppet would fail to bring it back online. Only by moving the notify
-	# out of the "service" stanza would it work correctly. - nwaller May 2013
 }
