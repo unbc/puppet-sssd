@@ -22,6 +22,10 @@
 # [*param2*]
 #  what it does
 #
+# === Requires
+# - [ripienaar/concat]
+# - [puppetlab/stdlib]
+#
 # === Example
 #
 # sssd::domain { 'contoso.com':

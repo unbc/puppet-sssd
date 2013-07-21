@@ -13,6 +13,9 @@
 #   unlimited use of the sudo command. The LDAP groups MUST have
 #   a numeric group ID (eg. gidNumber) defined to be usable.
 #
+# === Requires
+# - [puppetlab/stdlib]
+#
 # === Example
 # 
 # class { 'sssd::sudo':
