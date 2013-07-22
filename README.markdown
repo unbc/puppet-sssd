@@ -19,7 +19,7 @@ sssd::domain { 'mydomain.local':
   krb5_realm           => 'MYDOMAIN.LOCAL',
   ldap_default_bind_dn => 'CN=SssdService,DC=mydomain,DC=local',
   ldap_default_authtok => 'My ultra-secret password',
-  simple_allow_groups  => 'SssdAdmins',
+  simple_allow_groups  => ['SssdAdmins'],
 }
 ```
 
@@ -52,7 +52,7 @@ to use a real sudo module instead.
 
 ```
 class { 'sssd::sudo':
-  sudo_groups => 'SssdAdmins',
+  sudo_groups => ['SssdAdmins'],
 }
 ```
 
