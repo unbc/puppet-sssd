@@ -4,10 +4,7 @@ and manages the [SSSD](https://fedorahosted.org/sssd/) service.
 
 ## Module Description
 This SSSD module is compatible with distributions based on RedHat Enterprise
-Linux, including CentOS and Scientific Linux. It works best when connecting
-to Active Directory LDAP domains.
-
-This module has been built on and tested against Puppet 3.2.
+Linux. It works best with Active Directory LDAP domains.
 
 ## Quick Start
 I just want to login with my network username. What's the minimum I need?
@@ -55,3 +52,8 @@ class { 'sssd::homedir': }
 
 ### Authenticate against multiple domains
 Just add a second `sssd::domain` resource.
+
+## Limitations
+This module has been built on and tested against Puppet 3.2.
+
+This module has been tested on Scientific Linux 6.
