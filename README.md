@@ -53,6 +53,6 @@ class { 'sssd::homedir': }
 Just add a second `sssd::domain` resource.
 
 ## Limitations
-This module has been built on and tested against Puppet 3.2.
+This module has been built on and tested against Puppet 2.6.18.
 
 This module has been tested on Scientific Linux 6.
