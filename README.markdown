@@ -41,6 +41,7 @@ sssd::domain { 'mydomain.local':
   ldap_user_uid_number     => 'MSSFU2x-uidNumber',
   ldap_user_gid_number     => 'MSSFU2x-gidNumber',
   ldap_user_home_directory => 'msSFUHomeDirectory',
+  ldap_group_gid_number    => 'MSSFU2x-gidNumber',
 }
 ```
 
