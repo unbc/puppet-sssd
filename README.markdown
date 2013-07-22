@@ -26,16 +26,28 @@ sssd::domain { 'mydomain.local':
 ## Usage
 
 ### Different attribute schema
-This module tries to use defaults that work with the most recent version of
-Active Directory. If you're using something else, you might need to specify
-your own custom attribute mapping. This is defined per-domain.
+Most LDAP servers use standard attribute names defined in rfc2307. This
+includes Windows Server since 2003 R2. If your directory uses a non-standard
+schema for posix accounts, you will need to define a custom attribute mapping.
 
 ```
-ldap_user_uid_number => 'MSSFU2x-uidNumber',
-ldap_user_gid_number => 'MSSFU2x-gidNumber',
+sssd::domain { 'mydomain.local':
+  ...
+  ldap_user_object_class   => 'user',
+  ldap_user_name           => 'sAMAccountName',
+  ldap_user_principal      => 'userPrincipalName',
+  ldap_user_gecos          => 'MSSFU2x-gecos',
+  ldap_user_shell          => 'MSSFU2x-loginShell',
+  ldap_user_uid_number     => 'MSSFU2x-uidNumber',
+  ldap_user_gid_number     => 'MSSFU2x-gidNumber',
+  ldap_user_home_directory => 'msSFUHomeDirectory',
+}
 ```
 
 ### Managing sudo access
+This is an optional helper class for defining system groups that are
+allowed to use sudo. If you have more specific needs, you might want
+to use a real sudo module instead.
 
 ```
 class { 'sssd::sudo':
@@ -44,15 +56,18 @@ class { 'sssd::sudo':
 ```
 
 ### Automatically create home directories
+Allow home directories to be created automatically on first logon.
+This is very useful when authenticating against a directory!
 
 ```
 class { 'sssd::homedir': }
 ```
 
 ### Authenticate against multiple domains
-Just add a second `sssd::domain` resource.
+Declare a second `sssd::domain` resource.
+And ALSO modify the domains parameter for the sssd class.
 
 ## Limitations
 This module has been built on and tested against Puppet 2.6.18.
 
-This module has been tested on Scientific Linux 6.
+This module has been tested on Scientific Linux 6.3.
