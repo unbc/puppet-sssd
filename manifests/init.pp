@@ -44,7 +44,8 @@ class sssd (
   
   concat { 'sssd_conf':
     path        => '/etc/sssd/sssd.conf',
-    mode        => '0400',
+    mode        => '0600',
+    # SSSD fails to start if file mode is anything other than 0600
     require     => Package['sssd'],
   }
   
