@@ -18,7 +18,8 @@
 #
 # === Parameters
 # [*ldap_domain*]
-# Required. String. Fully-qualified DNS name of your LDAP domain.
+# Optional. String. Fully-qualified DNS name of your LDAP domain.
+# Defaults to using the name parameter.
 #
 # [*ldap_uri*]
 # Required. String.
@@ -46,6 +47,7 @@
 # Required. String.
 # Password associated with account used for LDAP simple bind.
 #
+# ==== LDAP user schema
 # [*ldap_user_object_class*]
 # Optional. String. Defaults to "user".
 # Depending on what kind of LDAP server you're using, you may need to customize
@@ -61,6 +63,7 @@
 #
 # [*ldap_user_principal*]
 # Optional. String. Defaults to "userPrincipalName".
+# The LDAP attribute that contains the user´s Kerberos User Principle.
 #
 # [*ldap_user_uid_number*]
 # Optional. String. Defaults to "uidNumber".
@@ -77,6 +80,7 @@
 # [*ldap_user_home_directory*]
 # Optional. String. Defaults to "unixHomeDirectory".
 #
+# ==== LDAP group schema
 # [*ldap_group_object_class*]
 # Optional. String. Defaults to "group".
 #
@@ -89,6 +93,7 @@
 # [*ldap_group_gid_number*]
 # Optional. String. Defaults to "gidNumber".
 #
+# ==== Other LDAP parameters
 # [*ldap_id_use_start_tls*]
 # (true|false) Optional. Boolean. Defaults to true.
 # START TLS ensures that all passwords sent to the LDAP server are encrypted.
@@ -162,8 +167,13 @@
 # - [puppetlab/stdlib]
 #
 # === Example
-# sssd::domain { 'contoso.com':
-#   ldap_domain => 'contoso.com',
+# sssd::domain { 'mydomain.local':
+#   ldap_uri             => 'ldap://mydomain.local',
+#   ldap_search_base     => 'DC=mydomain,DC=local',
+#   krb5_realm           => 'MYDOMAIN.LOCAL',
+#   ldap_default_bind_dn => 'CN=SssdService,DC=mydomain,DC=local',
+#   ldap_default_authtok => 'My ultra-secret password',
+#   simple_allow_groups  => 'SssdAdmins',
 # }
 #
 # === Authors
@@ -173,7 +183,7 @@
 # Copyright 2013 Nicholas Waller, unless otherwise noted.
 #
 define sssd::domain (
-  $ldap_domain,
+  $ldap_domain = $name,
   $ldap_uri,
   $ldap_search_base,
   $krb5_realm,
@@ -217,7 +227,10 @@ define sssd::domain (
   validate_bool($ldap_referrals)
   validate_bool($cache_credentials)
   validate_bool($krb5_canonicalize)
-
+  validate_re($ldap_tls_reqcert,['hard','demand','try','allow','never'])
+  validate_re($ldap_default_authtok_type,['password','obfuscated_password'])
+  validate_re($ldap_schema,['rfc2307','rfc2307bis','ipa','ad'])
+  
   include sssd::params
   if $min_id == undef {
     $real_min_id = $sssd::params::dist_uid_min

@@ -14,8 +14,7 @@ class { 'sssd':
   domains              => [ 'mydomain.local' ],
 }
 sssd::domain { 'mydomain.local':
-  ldap_domain          => 'mydomain.local',
-  ldap_uri             => 'ldaps://mydomain.local',
+  ldap_uri             => 'ldap://mydomain.local',
   ldap_search_base     => 'DC=mydomain,DC=local',
   krb5_realm           => 'MYDOMAIN.LOCAL',
   ldap_default_bind_dn => 'CN=SssdService,DC=mydomain,DC=local',
