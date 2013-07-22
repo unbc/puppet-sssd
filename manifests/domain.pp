@@ -63,19 +63,19 @@
 # Optional. String. Defaults to "userPrincipalName".
 #
 # [*ldap_user_uid_number*]
-# Optional. String. Defaults to "MSSFU2x-uidNumber".
+# Optional. String. Defaults to "uidNumber".
 #
 # [*ldap_user_gid_number*]
-# Optional. String. Defaults to "MSSFU2x-gidNumber".
+# Optional. String. Defaults to "gidNumber".
 #
 # [*ldap_user_gecos*]
-# Optional. String. Defaults to "MSSFU2x-gecos".
+# Optional. String. Defaults to "gecos".
 #
 # [*ldap_user_shell*]
-# Optional. String. Defaults to "MSSFU2x-loginShell".
+# Optional. String. Defaults to "loginShell".
 #
 # [*ldap_user_home_directory*]
-# Optional. String. Defaults to "msSFUHomeDirectory".
+# Optional. String. Defaults to "unixHomeDirectory".
 #
 # [*ldap_group_object_class*]
 # Optional. String. Defaults to "group".
@@ -84,10 +84,10 @@
 # Optional. String. Defaults to "cn".
 #
 # [*ldap_group_member*]
-# Optional. String. Defaults to "MSSFU2x-gidNumber".
+# Optional. String. Defaults to "gidNumber".
 #
 # [*ldap_group_gid_number*]
-# Optional. String. Defaults to "member".
+# Optional. String. Defaults to "gidNumber".
 #
 # [*ldap_id_use_start_tls*]
 # (true|false) Optional. Boolean. Defaults to true.
@@ -105,10 +105,10 @@
 # Otherwise, sssd will use the OpenLDAP defaults in /etc/openldap/ldap.conf
 #
 # [*ldap_default_authtok_type*]
-# Optional. String. Defaults to "password".
+# (password|obfuscated_password) Optional. String. Defaults to "password".
 #
 # [*ldap_schema*]
-# Optional. String. Defaults to "rfc2307bis".
+# (rfc2307|rfc2307bis|ipa|ad) Optional. String. Default is "rfc2307bis".
 # Three LDAP schemas are currently supported: rfc2307, rfc2307bis, IPA
 # The schema mainly affects how group membership is recorded in attributes.
 # Active Directory uses rfc2307bis.
@@ -186,16 +186,16 @@ define sssd::domain (
   $ldap_user_object_class = 'user',
   $ldap_user_name = 'sAMAccountName',
   $ldap_user_principal = 'userPrincipalName',
-  $ldap_user_uid_number = 'MSSFU2x-uidNumber',
-  $ldap_user_gid_number = 'MSSFU2x-gidNumber',
-  $ldap_user_gecos = 'MSSFU2x-gecos',
-  $ldap_user_shell = 'MSSFU2x-loginShell',
-  $ldap_user_home_directory = 'msSFUHomeDirectory',
+  $ldap_user_uid_number = 'uidNumber',
+  $ldap_user_gid_number = 'gidNumber',
+  $ldap_user_gecos = 'gecos',
+  $ldap_user_shell = 'loginShell',
+  $ldap_user_home_directory = 'unixHomeDirectory',
 
   $ldap_group_object_class = 'group',
   $ldap_group_name = 'cn',
   $ldap_group_member = 'member',
-  $ldap_group_gid_number = 'MSSFU2x-gidNumber',
+  $ldap_group_gid_number = 'gidNumber',
 
   $ldap_id_use_start_tls = true,
   $ldap_tls_reqcert = 'demand',
@@ -211,6 +211,12 @@ define sssd::domain (
   $krb5_canonicalize = false,
 ) {
   validate_array($simple_allow_groups)
+  validate_bool($ldap_id_use_start_tls)
+  validate_bool($enumerate)
+  validate_bool($ldap_force_upper_case_realm)
+  validate_bool($ldap_referrals)
+  validate_bool($cache_credentials)
+  validate_bool($krb5_canonicalize)
 
   include sssd::params
   if $min_id == undef {
