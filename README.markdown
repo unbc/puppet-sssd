@@ -1,6 +1,4 @@
 # sssd
-This is a [Puppet](https://puppetlabs.com/) module that installs, configures,
-and manages the [SSSD](https://fedorahosted.org/sssd/) service.
 
 ####Table of Contents
 1. [Overview](#overview)
@@ -13,7 +11,7 @@ and manages the [SSSD](https://fedorahosted.org/sssd/) service.
 5. [Limitations](#limitations)
 
 ## Overview
-The SSSD module installs, configures, and manages the sssd service on RedHat platforms.
+The SSSD module makes it easy to authenticate against Active Directory with sssd.
 
 ## Module Description
 The SSSD module manages the sssd service on distributions based on RedHat
