@@ -45,17 +45,6 @@ sssd::domain { 'mydomain.local':
 }
 ```
 
-### Managing sudo access
-This is an optional helper class for defining system groups that are
-allowed to use sudo. If you have more specific needs, you might want
-to use a real sudo module instead.
-
-```
-class { 'sssd::sudo':
-  sudo_groups => 'SssdAdmins',
-}
-```
-
 ### Automatically create home directories
 Allow home directories to be created automatically on first logon.
 This is very useful when authenticating against a directory!
