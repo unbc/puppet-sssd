@@ -16,9 +16,17 @@
 # Copyright 2013 Nicholas Waller, unless otherwise noted.
 #
 class sssd::homedir {
-  if $osfamily == 'RedHat' and versioncmp($operatingsystemrelease,'6.0') >= 0 {
-    $reqs = [ Service['messagebus'], Service['oddjobd'] ]
-    # In RHEL6, messagebus is not started by default.  
+  $is_rhel = $osfamily == 'RedHat'
+  $rhel6plus = $is_rhel and versioncmp($operatingsystemrelease,'6.0') >= 0
+  $oddjob_available = $rhel6plus
+
+  if $selinux_enforced == 'true' and $oddjob_available == false {
+    fail('Oddjob is required for compatibility with selinux')
+  }
+
+  if $oddjob_available {
+    $reqs = [ Service['oddjobd'] ]
+    $check_mod = 'pam_oddjob_mkhomedir.so'
     service { 'messagebus':
       ensure    => running,
       enable    => true,
@@ -29,7 +37,6 @@ class sssd::homedir {
   
     package { 'oddjob-mkhomedir':
       ensure => installed,
-      notify => Exec['authconfig-mkhomedir'],
     }
   
     service { 'oddjobd':
@@ -37,18 +44,15 @@ class sssd::homedir {
       enable  => true,
       require => [ Package['oddjob-mkhomedir'], Service['messagebus'] ],
     }
-  } elsif $osfamily == 'RedHat' and versioncmp($operatingsystemrelease,'6.0') < 0 {
-    # pam_mkhomedir.so is already installed as part of pam.
-    # facter is true if selinux is enabled, EVEN in permissive mode
-    if $selinux == 'true' {
-      fail('pam_mkhomedir.so required when using RHEL < 6, but pam_mkhomedir.so is not compatible with selinux.')
-    }
+  } else {
+    $reqs = []
+    $check_mod = 'pam_mkhomedir.so'
   }
 
   # We always need to start the sssd service after calling --mkhomedir.
   exec { 'authconfig-mkhomedir':
     command     => '/usr/sbin/authconfig --enablemkhomedir --update',
-    refreshonly => true,
+    unless      => "/bin/grep ${check_mod} /etc/pam.d/system-auth",
     require     => $reqs,
     notify      => Exec[ 'authconfig-sssd' ], 
   }

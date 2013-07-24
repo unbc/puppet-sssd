@@ -14,6 +14,10 @@
 # Optional. Array. Default is 'root'. Exclude specific groups from being
 # fetched using sssd. This is particularly useful for system accounts.
 #
+# [*make_home_dir*]
+# (true|false) Optional. Boolean. Default is false. Enable this if you
+# want network users to have a home directory created when they login.
+#
 # === Requires
 # - [ripienaar/concat]
 # - [puppetlab/stdlib]
@@ -31,12 +35,14 @@
 #
 class sssd (
   $domains,
+  $make_home_dir   = false,
   $filter_users    = [ 'root' ],
   $filter_groups   = [ 'root' ]
 ) {
   validate_array($domains)
   validate_array($filter_users)
   validate_array($filter_groups)
+  validate_bool($make_home_dir)
 
   package { 'sssd':
     ensure      => installed,
@@ -53,6 +59,10 @@ class sssd (
     target  => 'sssd_conf',
     content => template('sssd/header_sssd.conf.erb'),
     order   => 10,
+  }
+
+  if $make_home_dir {
+    class { 'sssd::homedir': }
   }
 
   exec { 'authconfig-sssd':
