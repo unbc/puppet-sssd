@@ -32,6 +32,7 @@ I just want to login with my network username. What's the minimum I need?
       ldap_default_bind_dn => 'CN=SssdService,DC=mydomain,DC=local',
       ldap_default_authtok => 'My ultra-secret password',
       simple_allow_groups  => ['SssdAdmins'],
+      make_home_dir        => true,
     }
 
 ## Usage
@@ -54,15 +55,25 @@ schema for posix accounts, you will need to define a custom attribute mapping.
       ldap_group_gid_number    => 'MSSFU2x-gidNumber',
     }
 
-### Automatically create home directories
-Allow home directories to be created automatically on first logon.
-This is very useful when authenticating against a directory!
-
-    class { 'sssd::homedir': }
-
 ### Authenticate against multiple domains
-Declare a second `sssd::domain` resource.
-And ALSO modify the domains parameter for the sssd class.
+SSSD makes it easy to authenticate against multiple domains. You need to
+create a second (or third) `sssd::domain` resource and fill in the
+appropriate parameters as shown above.
+
+You also need to add the domain, with the same name, to the array of domains
+passed to the sssd class. This defines the lookup order.
+
+    class { 'sssd':
+      domains  => [ 'domain_one.local', 'domain_two.local' ],
+    }
+    sssd::domain { 'domain_one.local':
+      ldap_uri => 'ldap://domain_one.local',
+      ...
+    }
+    sssd::domain { 'domain_two.local':
+      ldap_uri => 'ldap://domain_two.local',
+      ...
+    }
 
 ## Limitations
 This module has been built on and tested against these Puppet versions:
