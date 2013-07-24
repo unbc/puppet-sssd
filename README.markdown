@@ -72,3 +72,6 @@ This module has been built on and tested against these Puppet versions:
 This module has been tested on the following distributions:
   * Scientific Linux 6.3
   * CentOS release 5.6
+
+If you need an SSSD module for Debian, there's one by [Unyonsys]
+(https://github.com/Unyonsys/puppet-module-sssd).
