@@ -20,9 +20,9 @@ ldap_default_authtok_type = <%= @ldap_default_authtok_type %>
 ldap_default_authtok = <%= @ldap_default_authtok %>
 ldap_id_use_start_tls = <%= @ldap_id_use_start_tls %>
 ldap_tls_reqcert = <%= @ldap_tls_reqcert %>
-<% if @ldap_tls_cacert %>
+<% if @ldap_tls_cacert -%>
 ldap_tls_cacert = <%= @ldap_tls_cacert %>
-<% end %>
+<% end -%>
 ldap_user_object_class = <%= @ldap_user_object_class %>
 ldap_user_name = <%= @ldap_user_name %>
 ldap_user_uid_number = <%= @ldap_user_uid_number %>
