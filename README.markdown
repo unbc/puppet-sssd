@@ -83,12 +83,14 @@ passed to the sssd class. This defines the lookup order.
 
 ## Limitations
 This module has been built on and tested against these Puppet versions:
- - Puppet 3.2.3
- - Puppet 2.6.18
+* Puppet 3.2.4
+* Puppet 3.2.3
+* Puppet 2.6.18
 
 This module has been tested on the following distributions:
- - Scientific Linux 6.3
- - CentOS release 5.6
+* Scientific Linux 6.4
+* Scientific Linx 6.3
+* CentOS release 5.6
 
 If you need an SSSD module for Debian, there's one by [Unyonsys]
 (https://github.com/Unyonsys/puppet-module-sssd).
