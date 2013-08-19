@@ -24,6 +24,7 @@ I just want to login with my network username. What's the minimum I need?
 
     class { 'sssd':
       domains              => [ 'mydomain.local' ],
+      make_home_dir        => true,
     }
     sssd::domain { 'mydomain.local':
       ldap_uri             => 'ldap://mydomain.local',
@@ -32,8 +33,13 @@ I just want to login with my network username. What's the minimum I need?
       ldap_default_bind_dn => 'CN=SssdService,DC=mydomain,DC=local',
       ldap_default_authtok => 'My ultra-secret password',
       simple_allow_groups  => ['SssdAdmins'],
-      make_home_dir        => true,
     }
+
+Note that you must have certificates configured appropriate on your system so
+that a secure TLS connection can be established with your LDAP server. On
+RedHat-based systems, you need to install certificates of your trusted
+certificate authority into `/etc/openldap/certs` and then hash the certs by
+running `cacertdir_rehash /etc/openldap/certs`.
 
 ## Usage
 
