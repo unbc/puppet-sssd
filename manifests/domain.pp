@@ -34,6 +34,14 @@
 # specified in the RootDSE as the search base. If that isn't working,
 # you will need to specify it manually here.
 #
+# [*ldap_user_search_base*]
+# Optional. String.
+# An optional base DN to restrict user searches to a specific subtree.
+#
+# [*ldap_group_search_base*]
+# Optional. String.
+# An optional base DN to restrict group searches to a specific subtree.
+#
 # [*krb5_realm*]
 # Required. String.
 # This setting is only used if "krb5" is one of the providers.
@@ -186,6 +194,9 @@ define sssd::domain (
   $ldap_domain = $name,
   $ldap_uri,
   $ldap_search_base,
+  $ldap_user_search_base=$ldap_search_base,
+  $ldap_group_search_base=$ldap_search_base,
+  $ldap_netgroup_search_base=$ldap_search_base,
   $krb5_realm,
 
   $ldap_default_bind_dn,
