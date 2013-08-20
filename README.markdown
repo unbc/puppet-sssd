@@ -81,6 +81,27 @@ passed to the sssd class. This defines the lookup order.
       ...
     }
 
+### Use Hiera for configuration data
+The SSSD module is designed to work with the automatic parameter lookup feature
+introduced with Hiera in Puppet 3. If you are using Hiera, you can shorten your
+Puppet manifest down to one line:
+
+    include sssd
+
+Then add configuration data into your Hiera data files. If you are using a YAML
+backend, your configuration file might look like this.
+
+    sssd::domains:
+    - 'mydomain.local'
+    sssd::backends:
+      'mydomain.local':
+        ldap_uri: 'ldap://mydomain.local'
+        ldap_search_base: 'DC=mydomain,DC=local'
+        krb5_realm: 'MYDOMAIN.LOCAL'
+        ldap_default_bind_dn: 'CN=SssdService,DC=mydomain,DC=local'
+        ldap_default_authtok: 'My ultra-secret password'
+        simple_allow_groups: ['SssdAdmins']
+
 ## Limitations
 This module has been built on and tested against these Puppet versions:
 * Puppet 3.2.4
