@@ -6,6 +6,12 @@
 # Required. Array. For each sssd::domain type you declare, you SHOULD also
 # include the domain name here. This defines the domain lookup order.
 #
+# [*backends*]
+# Optional. Hash. The typical way of setting up backends for SSSD is by using
+# the sssd::domain defined type. That poses a problem if you want to use
+# Hiera for storing your configuration data. This parameter allows you to
+# pass a hash that is used to automatically instantiate sssd::domain types.
+#
 # [*filter_users*]
 # Optional. Array. Default is 'root'. Exclude specific users from being
 # fetched using sssd. This is particularly useful for system accounts.
@@ -35,6 +41,7 @@
 #
 class sssd (
   $domains,
+  $backends        = undef,
   $make_home_dir   = false,
   $filter_users    = [ 'root' ],
   $filter_groups   = [ 'root' ]
@@ -43,6 +50,10 @@ class sssd (
   validate_array($filter_users)
   validate_array($filter_groups)
   validate_bool($make_home_dir)
+
+  if $backends != undef {
+    create_resources('sssd::domain', $backends)
+  }
 
   package { 'sssd':
     ensure      => installed,
