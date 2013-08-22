@@ -249,6 +249,12 @@ define sssd::domain (
     $real_min_id = $min_id
   }
 
+  concat::fragment { "sssd_domainname_${ldap_domain}":
+    target  => 'sssd_conf',
+    content => "$ldap_domain,",
+    order   => 10,
+  }
+
   concat::fragment { "sssd_domain_${ldap_domain}":
     target  => 'sssd_conf',
     content => template('sssd/domain.conf.erb'),

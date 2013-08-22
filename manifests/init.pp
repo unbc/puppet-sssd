@@ -24,7 +24,6 @@
 #
 # === Example
 # class { 'sssd':
-#   domains => [ 'uni.adr.unbc.ca' ],
 # }
 #
 # === Authors
@@ -34,7 +33,7 @@
 # Copyright 2013 Nicholas Waller, unless otherwise noted.
 #
 class sssd (
-  $domains,
+  $domains, # ignored. only here for backwards-compatibility.
   $make_home_dir   = false,
   $filter_users    = [ 'root' ],
   $filter_groups   = [ 'root' ]
@@ -54,11 +53,22 @@ class sssd (
     # SSSD fails to start if file mode is anything other than 0600
     require     => Package['sssd'],
   }
-  
-  concat::fragment{ 'sssd_conf_header':
+
+  concat::fragment{ 'sssd_conf_header1':
     target  => 'sssd_conf',
-    content => template('sssd/header_sssd.conf.erb'),
-    order   => 10,
+    content => template('sssd/header1_sssd.conf.erb'),
+    order   => '05',
+  }
+  concat::fragment{ 'sssd_conf_domains_linestart':
+    target  => 'sssd_conf',
+    content => 'domains = ',
+    order   => '09',
+  }
+  # fragments at order 10 fill out the domain list
+  concat::fragment{ 'sssd_conf_header2':
+    target  => 'sssd_conf',
+    content => template('sssd/header2_sssd.conf.erb'),
+    order   => '15',
   }
 
   if $make_home_dir {
