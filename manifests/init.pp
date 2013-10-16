@@ -87,4 +87,8 @@ class sssd (
     enable      => true,
     subscribe   => Exec['authconfig-sssd'],
   }
+
+  service { 'crond':
+    subscribe   => Service['sssd'],
+  }
 }
