@@ -8,5 +8,5 @@ description 'Manage SSSD authentication on RHEL-based systems.'
 project_page 'https://github.com/unbc/puppet-sssd'
 
 ## Add dependencies, if any:
-dependency 'ripienaar/concat'
+dependency 'puppetlabs/concat'
 dependency 'puppetlabs/stdlib'
