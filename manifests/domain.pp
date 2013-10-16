@@ -113,7 +113,7 @@
 # sssd should demand a trusted certificate, otherwise terminate the connection.
 #
 # [*ldap_tls_cacert*]
-# Optional. Not yet implemented.
+# Optional.
 # If desired, you can specify a file containing trusted Certificate Authorities.
 # Otherwise, sssd will use the OpenLDAP defaults in /etc/openldap/ldap.conf
 #
@@ -247,6 +247,22 @@ define sssd::domain (
     $real_min_id = $sssd::params::dist_uid_min
   } else {
     $real_min_id = $min_id
+  }
+
+  if ($ldap_tls_cacert != undef) {
+    $certdata = regsubst($ldap_tls_cacert, '[\n]', '', 'MG')
+    validate_re($certdata, '^-----BEGIN CERTIFICATE-----.*END CERTIFICATE-----$')
+    file { '/etc/sssd/cacerts':
+      ensure  => directory,
+      mode    => '0500',
+    }
+    $ldap_tls_cacert_path = "/etc/sssd/cacerts/${ldap_domain}"
+    file { $ldap_tls_cacert_path:
+      ensure  => present,
+      content => $ldap_tls_cacert,
+      mode    => '0400',
+      before  => Concat::Fragment["sssd_domain_${ldap_domain}"],
+    }
   }
 
   concat::fragment { "sssd_domain_${ldap_domain}":
