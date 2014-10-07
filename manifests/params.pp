@@ -20,8 +20,19 @@
 #
 class sssd::params {
   case $::osfamily {
-    'RedHat': {
+    'Debian': {
+      $package = [ 'sssd',
+                   'libnss-sss',
+                   'libpam-sss' ]
       $dist_uid_min = 1000
+      $authconfig_sssd = '/bin/true'
+      $cron_service = 'cron'
+    }
+    'RedHat': {
+      $package = 'sssd'
+      $dist_uid_min = 1000
+      $authconfig_sssd = '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablelocauthorize --update'
+      $cron_service = 'crond'
     }
     default: {
       fail('Unsupported distribution')

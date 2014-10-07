@@ -45,7 +45,7 @@ class sssd (
   $make_home_dir   = false,
   $filter_users    = [ 'root' ],
   $filter_groups   = [ 'root' ]
-) {
+) inherits sssd::params {
   validate_array($domains)
   validate_array($filter_users)
   validate_array($filter_groups)
@@ -55,7 +55,7 @@ class sssd (
     create_resources('sssd::domain', $backends)
   }
 
-  package { 'sssd':
+  package { $sssd::params::package:
     ensure      => installed,
   }
   
@@ -63,7 +63,7 @@ class sssd (
     path        => '/etc/sssd/sssd.conf',
     mode        => '0600',
     # SSSD fails to start if file mode is anything other than 0600
-    require     => Package['sssd'],
+    require     => Package[$sssd::params::package],
   }
   
   concat::fragment{ 'sssd_conf_header':
@@ -77,7 +77,7 @@ class sssd (
   }
 
   exec { 'authconfig-sssd':
-    command     => '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablelocauthorize --update',
+    command     => $sssd::params::authconfig_sssd,
     refreshonly => true,
     subscribe   => Concat['sssd_conf'],
   }
@@ -88,7 +88,7 @@ class sssd (
     subscribe   => Exec['authconfig-sssd'],
   }
 
-  service { 'crond':
+  service { $sssd::params::cron_service:
     subscribe   => Service['sssd'],
   }
 }
