@@ -71,7 +71,7 @@
 #
 # [*ldap_user_principal*]
 # Optional. String. Defaults to "userPrincipalName".
-# The LDAP attribute that contains the user´s Kerberos User Principle.
+# The LDAP attribute that contains the userÂ´s Kerberos User Principle.
 #
 # [*ldap_user_uid_number*]
 # Optional. String. Defaults to "uidNumber".
