@@ -59,11 +59,13 @@ class sssd (
     ensure      => installed,
   }
   
+  # SSSD fails to start if file mode is anything other than 0600
   concat { 'sssd_conf':
-    path        => '/etc/sssd/sssd.conf',
-    mode        => '0600',
-    # SSSD fails to start if file mode is anything other than 0600
-    require     => Package['sssd'],
+    path    => '/etc/sssd/sssd.conf',
+    mode    => '0600',
+    owner   => 'root',
+    group   => 'root',
+    require => Package['sssd'],
   }
   
   concat::fragment{ 'sssd_conf_header':
