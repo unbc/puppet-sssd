@@ -1,4 +1,4 @@
-# == Define: sssd::domain
+# Define: sssd::domain
 # This type is used to define one or more domains which SSSD
 # will authenticate against.
 #
@@ -43,7 +43,7 @@
 # An optional base DN to restrict group searches to a specific subtree.
 #
 # [*krb5_realm*]
-# Required. String.
+# Optional. String.
 # This setting is only used if "krb5" is one of the providers.
 # SSSD does not use the settings from /etc/krb5.conf.
 #
@@ -71,7 +71,7 @@
 #
 # [*ldap_user_principal*]
 # Optional. String. Defaults to "userPrincipalName".
-# The LDAP attribute that contains the user´s Kerberos User Principle.
+# The LDAP attribute that contains the userÂ´s Kerberos User Principle.
 #
 # [*ldap_user_uid_number*]
 # Optional. String. Defaults to "uidNumber".
@@ -108,7 +108,7 @@
 # TLS encryption is maybe handled by OpenLDAP, I think.
 #
 # [*ldap_tls_reqcert*]
-# (demand|hard) Optional. String. Defaults to "demand".
+# (demand|hard|never|allow) Optional. String. Defaults to "demand".
 # How should sssd treat bad certificates from the server? In almost all cases,
 # sssd should demand a trusted certificate, otherwise terminate the connection.
 #
@@ -170,6 +170,32 @@
 # When using Kerberos with Active Directory, canonicalization should be set
 # to false so that cached credentials work properly.
 #
+# [*ldap_access_filter*]
+# Optional. String. Defaults is blank.
+# This specifies an accses filter to be used to allow access to the server.
+#
+# [*auth_provider*]
+# (krb5|ldap|ad) Optional. String. Defaults is krb5.
+# The authentication provider used for the domain.
+#
+# [*chpass_provider*]
+# (krb5|ldap|ad|none) Optional. String. Defaults is krb5.
+# The provider which should handle change password operations for the domain
+#
+# [*access_provider*]
+# (simple|ad|ldap|permit|deby) Optional. String. Defaults is simple.
+# The access control provider used for the domain.
+#
+# [*case_sensitive*]
+# (true|false) Optional. Boolean. Defaults is true.
+# Treat user and group names as case sensitive.
+#
+# [*ldap_id_mapping*]
+# (true|false) Optional. Boolean. Defaults is true.
+# By default, the AD provider will map UID and GID values from the objectSID parameter in Active Directory.
+# If you want to disable ID mapping and instead rely on POSIX attributes defined in Active Directory, 
+# you should set to false
+# 
 # === Requires
 # - [ripienaar/concat]
 # - [puppetlab/stdlib]
@@ -197,7 +223,7 @@ define sssd::domain (
   $ldap_user_search_base=$ldap_search_base,
   $ldap_group_search_base=$ldap_search_base,
   $ldap_netgroup_search_base=$ldap_search_base,
-  $krb5_realm,
+  $krb5_realm = '',
 
   $ldap_default_bind_dn,
   $ldap_default_authtok,
@@ -230,6 +256,14 @@ define sssd::domain (
   $min_id = undef,
   $entry_cache_timeout = 60,
   $krb5_canonicalize = false,
+  $ldap_access_filter = '',
+
+  $auth_provider = 'krb5',
+  $chpass_provider = 'krb5',
+  $access_provider = 'simple',
+  $case_sensitive = true,
+  $ldap_id_mapping = true,
+
 ) {
   validate_array($simple_allow_groups)
   validate_bool($ldap_id_use_start_tls)
