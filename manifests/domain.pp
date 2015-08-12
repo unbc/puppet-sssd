@@ -170,6 +170,32 @@
 # When using Kerberos with Active Directory, canonicalization should be set
 # to false so that cached credentials work properly.
 #
+# [*ldap_access_filter*]
+# Optional. String. Defaults is blank.
+# This specifies an accses filter to be used to allow access to the server.
+#
+# [*auth_provider*]
+# (krb5|ldap|ad) Optional. String. Defaults is krb5.
+# The authentication provider used for the domain.
+#
+# [*chpass_provider*]
+# (krb5|ldap|ad|none) Optional. String. Defaults is krb5.
+# The provider which should handle change password operations for the domain
+#
+# [*access_provider*]
+# (simple|ad|ldap|permit|deby) Optional. String. Defaults is simple.
+# The access control provider used for the domain.
+#
+# [*case_sensitive*]
+# (true|false) Optional. Boolean. Defaults is true.
+# Treat user and group names as case sensitive.
+#
+# [*ldap_id_mapping*]
+# (true|false) Optional. Boolean. Defaults is true.
+# By default, the AD provider will map UID and GID values from the objectSID parameter in Active Directory.
+# If you want to disable ID mapping and instead rely on POSIX attributes defined in Active Directory, 
+# you should set to false
+# 
 # === Requires
 # - [ripienaar/concat]
 # - [puppetlab/stdlib]
@@ -231,6 +257,13 @@ define sssd::domain (
   $entry_cache_timeout = 60,
   $krb5_canonicalize = false,
   $ldap_access_filter = '',
+
+  $auth_provider = 'krb5',
+  $chpass_provider = 'krb5',
+  $access_provider = 'simple',
+  $case_sensitive = true,
+  $ldap_id_mapping = true,
+
 ) {
   validate_array($simple_allow_groups)
   validate_bool($ldap_id_use_start_tls)

@@ -1,9 +1,9 @@
 [domain/<%= @ldap_domain %>]
 id_provider = ldap
-auth_provider = ldap
-chpass_provider = ldap
-access_provider = ldap
-case_sensitive = False
+auth_provider = <%= @auth_provider %>
+chpass_provider = <%= @chpass_provider %>
+access_provider = <%= @access_provider %>
+case_sensitive = <%= @case_sensitive %>
 simple_allow_groups = <%= @simple_allow_groups.flatten.join(',') %>
 cache_credentials = <%= @cache_credentials %>
 min_id = <%= @real_min_id %>
@@ -17,14 +17,14 @@ ldap_group_search_base = <%= @ldap_group_search_base %>
 ldap_netgroup_search_base = <%= @ldap_netgroup_search_base %>
 ldap_referrals = <%= @ldap_referrals %>
 enumerate = <%= @enumerate %>
-ldap_access_filter = <%= ldap_access_filter %>
+ldap_access_filter = <%= @ldap_access_filter %>
 ldap_force_upper_case_realm = <%= @ldap_force_upper_case_realm %>
 ldap_schema = <%= @ldap_schema %>
 ldap_default_bind_dn = <%= @ldap_default_bind_dn %>
 ldap_default_authtok_type = <%= @ldap_default_authtok_type %>
 ldap_default_authtok = <%= @ldap_default_authtok %>
 ldap_id_use_start_tls = <%= @ldap_id_use_start_tls %>
-ldap_id_mapping = True
+ldap_id_mapping = <%= @ldap_id_mapping %>
 ldap_tls_reqcert = <%= @ldap_tls_reqcert %>
 <% if @ldap_tls_cacert_path -%>
 ldap_tls_cacert = <%= @ldap_tls_cacert_path %>
